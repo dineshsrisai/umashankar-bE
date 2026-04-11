@@ -288,7 +288,7 @@ app.use(cors({
 
 Currently implemented as inline try/catch blocks within route handlers. Errors are caught and returned as `400 Bad Request` with the error message appended.
 ```
-
+```
 ---
 
 ## Security
