@@ -106,7 +106,7 @@ Ensure the following are installed and configured on your system:
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/<dineshsrisai>/<your-repo-name>.git
+git clone https://github.com/dineshsrisai/umashankar-bE.git
 
 # 2. Navigate into the backend directory
 cd backend
