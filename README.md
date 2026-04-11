@@ -21,7 +21,6 @@
 - [Error Handling](#error-handling)
 - [Security](#security)
 - [Deployment](#deployment)
-- [License](#license)
 
 ---
 
@@ -329,10 +328,5 @@ In **MongoDB Atlas → Network Access**, whitelist:
 
 ---
 
-## License
-
-This project is licensed under the **MIT License**.
-
----
 
 > Built for **UmaShankar Printers & Solutions**, Palakol — providing trusted printer repair, computer servicing, and CCTV installation services.
