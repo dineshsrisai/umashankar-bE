@@ -287,15 +287,6 @@ app.use(cors({
 ## Error Handling
 
 Currently implemented as inline try/catch blocks within route handlers. Errors are caught and returned as `400 Bad Request` with the error message appended.
-
-**Recommended Enhancement — Centralized Error Middleware:**
-
-```javascript
-// Add at the bottom of app.js, after all routes
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: err.message });
-});
 ```
 
 ---
