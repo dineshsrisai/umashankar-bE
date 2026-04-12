@@ -21,7 +21,6 @@
 - [Error Handling](#error-handling)
 - [Security](#security)
 - [Deployment](#deployment)
-- [License](#license)
 
 ---
 
@@ -107,7 +106,7 @@ Ensure the following are installed and configured on your system:
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/<your-username>/<your-repo-name>.git
+git clone https://github.com/dineshsrisai/umashankar-bE.git
 
 # 2. Navigate into the backend directory
 cd backend
@@ -288,17 +287,8 @@ app.use(cors({
 ## Error Handling
 
 Currently implemented as inline try/catch blocks within route handlers. Errors are caught and returned as `400 Bad Request` with the error message appended.
-
-**Recommended Enhancement — Centralized Error Middleware:**
-
-```javascript
-// Add at the bottom of app.js, after all routes
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: err.message });
-});
 ```
-
+```
 ---
 
 ## Security
@@ -329,10 +319,5 @@ In **MongoDB Atlas → Network Access**, whitelist:
 
 ---
 
-## License
-
-This project is licensed under the **MIT License**.
-
----
 
 > Built for **UmaShankar Printers & Solutions**, Palakol — providing trusted printer repair, computer servicing, and CCTV installation services.
