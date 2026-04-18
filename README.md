@@ -29,6 +29,7 @@
 This repository contains the **backend service layer** for the UmaShankar Printers & Solutions website. It exposes a RESTful API consumed by the React + Vite frontend via **Axios HTTP client**. The API handles dynamic retrieval of device/service records stored in a **MongoDB Atlas** cloud database, categorized by service type.
 
 **Key Capabilities:**
+
 - Type-based dynamic routing for multi-category service data
 - MongoDB Atlas cloud database integration with Mongoose ODM
 - CORS-enabled for cross-origin frontend consumption
@@ -39,15 +40,15 @@ This repository contains the **backend service layer** for the UmaShankar Printe
 
 ## Tech Stack
 
-| Layer | Technology | Version |
-|---|---|---|
-| Runtime | Node.js | v18+ |
-| Web Framework | Express.js | ^4.x |
-| ODM | Mongoose | ^8.x |
-| Database | MongoDB Atlas | Cloud (M0+) |
-| Environment Management | dotenv | ^16.x |
-| CORS Handling | cors (npm) | ^2.x |
-| Package Manager | npm | — |
+| Layer                  | Technology    | Version     |
+| ---------------------- | ------------- | ----------- |
+| Runtime                | Node.js       | v18+        |
+| Web Framework          | Express.js    | ^4.x        |
+| ODM                    | Mongoose      | ^8.x        |
+| Database               | MongoDB Atlas | Cloud (M0+) |
+| Environment Management | dotenv        | ^16.x       |
+| CORS Handling          | cors (npm)    | ^2.x        |
+| Package Manager        | npm           | —           |
 
 ---
 
@@ -133,7 +134,7 @@ PORT=3000
 
 > ⚠️ **Security Notice:** Never commit `.env` to version control. It is excluded via `.gitignore`. Exposing database credentials publicly will compromise your MongoDB Atlas cluster.
 
-**How it works:**  
+**How it works:**
 `require("dotenv").config()` is called at the top of `app.js` before any other module imports. This loads all key-value pairs from `.env` into `process.env`, making them accessible throughout the entire application via `process.env.VARIABLE_NAME`.
 
 ---
@@ -180,9 +181,9 @@ Retrieves all documents from the `devices` collection that match the specified `
 
 **URL Parameters**
 
-| Parameter | Type | Required | Accepted Values |
-|---|---|---|---|
-| `type` | `string` | ✅ Yes | `printer` \| `computer` \| `cctv` |
+| Parameter | Type     | Required | Accepted Values                   |
+| --------- | -------- | -------- | --------------------------------- |
+| `type`    | `string` | ✅ Yes   | `printer` \| `computer` \| `cctv` |
 
 **Example Requests**
 
@@ -201,14 +202,16 @@ GET /cctv
     "title": "HP LaserJet Pro Repair",
     "description": "Full diagnostic and repair service for HP LaserJet Pro series printers including cartridge replacement and drum cleaning.",
     "image": "https://example.com/images/hp-laserjet.jpg",
-    "type": "printer"
+    "type": "printer",
+    "featured": false
   },
   {
     "_id": "664a1f3c8b2e4a001f3d9c13",
-    "title": "Canon Inkjet Servicing",
-    "description": "Ink head cleaning, alignment calibration, and roller replacement for Canon Inkjet printers.",
-    "image": "https://example.com/images/canon-inkjet.jpg",
-    "type": "printer"
+    "title": "Passbook Printer",
+    "description": "Bank passbook specialist",
+    "image": "https://example.com/images/passbook.jpg",
+    "type": "printer",
+    "featured": true
   }
 ]
 ```
@@ -225,33 +228,35 @@ Triggered when a database query fails or an unexpected server error occurs.
 
 ## Database Schema
 
-**Collection:** `devices`  
-**ODM:** Mongoose  
+**Collection:** `devices`
+**ODM:** Mongoose
 **Database:** MongoDB Atlas
 
 ### Device Schema
 
 ```javascript
 {
-  title: String,           // Service/product title
-  description: String,     // Detailed description of the service
-  image: String,           // URL pointing to the service image asset
+  title: String,
+  description: String,
+  image: String,
+  featured: Boolean,
   type: {
     type: String,
-    enum: ["printer", "computer", "cctv"]   // Enforced enum constraint
+    enum: ["printer", "computer", "cctv"]
   }
 }
 ```
 
-| Field | Type | Constraint | Description |
-|---|---|---|---|
-| `_id` | ObjectId | Auto-generated | MongoDB document identifier |
-| `title` | String | None | Display name of the service |
-| `description` | String | None | Full description of the service |
-| `image` | String | None | CDN or static URL for the service image |
-| `type` | String | Enum | Service category: `printer`, `computer`, or `cctv` |
+| Field         | Type     | Constraint     | Description                                                                       |
+| ------------- | -------- | -------------- | --------------------------------------------------------------------------------- |
+| `_id`         | ObjectId | Auto-generated | MongoDB document identifier                                                       |
+| `title`       | String   | None           | Display name of the service                                                       |
+| `description` | String   | None           | Full description of the service                                                   |
+| `image`       | String   | None           | CDN or static URL for the service image                                           |
+| `featured`    | Boolean  | None           | Marks a product as Exclusive — displayed in a highlighted section on the frontend |
+| `type`        | String   | Enum           | Service category: `printer`, `computer`, or `cctv`                                |
 
-**Indexing Strategy:**  
+**Indexing Strategy:**
 Consider adding an index on the `type` field for improved query performance as the collection grows:
 
 ```javascript
@@ -262,10 +267,10 @@ deviceSchema.index({ type: 1 });
 
 ## Middleware
 
-| Middleware | Package | Purpose |
-|---|---|---|
-| CORS | `cors` | Allows cross-origin requests from the frontend (React dev server / production domain) |
-| JSON Body Parser | Built-in (`express.json()`) | Parses incoming JSON request bodies (add if POST/PUT routes are introduced) |
+| Middleware       | Package                     | Purpose                                                                               |
+| ---------------- | --------------------------- | ------------------------------------------------------------------------------------- |
+| CORS             | `cors`                      | Allows cross-origin requests from the frontend (React dev server / production domain) |
+| JSON Body Parser | Built-in (`express.json()`) | Parses incoming JSON request bodies (add if POST/PUT routes are introduced)           |
 
 **Current CORS Configuration:**
 
@@ -276,10 +281,12 @@ app.use(cors()); // Allows all origins — suitable for development
 **Recommended Production CORS Configuration:**
 
 ```javascript
-app.use(cors({
-  origin: "https://your-frontend-domain.com",
-  methods: ["GET"],
-}));
+app.use(
+  cors({
+    origin: "https://your-frontend-domain.com",
+    methods: ["GET"],
+  }),
+);
 ```
 
 ---
@@ -287,16 +294,15 @@ app.use(cors({
 ## Error Handling
 
 Currently implemented as inline try/catch blocks within route handlers. Errors are caught and returned as `400 Bad Request` with the error message appended.
-```
-```
+
 ---
 
 ## Security
 
-| Concern | Current Status | Recommendation |
-|---|---|---|
-| Database credentials | ✅ Stored in `.env` | 
-| `.env` in VCS | ✅ Excluded via `.gitignore` |
+| Concern              | Current Status               |
+| -------------------- | ---------------------------- |
+| Database credentials | ✅ Stored in `.env`          |
+| `.env` in VCS        | ✅ Excluded via `.gitignore` |
 
 ---
 
@@ -306,18 +312,11 @@ Currently implemented as inline try/catch blocks within route handlers. Errors a
 
 When deploying to platforms like **Render**, **Railway**, **Heroku**, or **Vercel (serverless)**, set environment variables through the platform dashboard — do **not** upload the `.env` file.
 
-| Variable | Value |
-|---|---|
-| `DBPASSWORD` | Your MongoDB Atlas password |
-| `PORT` | Platform-assigned (usually auto-injected) |
-
-### MongoDB Atlas Network Access
-
-In **MongoDB Atlas → Network Access**, whitelist:
-- `0.0.0.0/0` for open access (development / staging)
-- Your server's static IP (recommended for production)
+| Variable     | Value                                     |
+| ------------ | ----------------------------------------- |
+| `DBPASSWORD` | Your MongoDB Atlas password               |
+| `PORT`       | Platform-assigned (usually auto-injected) |
 
 ---
-
 
 > Built for **UmaShankar Printers & Solutions**, Palakol — providing trusted printer repair, computer servicing, and CCTV installation services.
