@@ -15,7 +15,9 @@ connectDb()
   .then(() => {
     console.log("Db connection successful");
     app.listen(process.env.PORT, () => {
-      console.log("Server is successfully listening to port 3000");
+      console.log(
+        `Server is successfully listening to port ${process.env.PORT}`,
+      );
     });
   })
   .catch((e) => {

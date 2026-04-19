@@ -284,7 +284,6 @@ app.use(cors()); // Allows all origins — suitable for development
 app.use(
   cors({
     origin: "https://your-frontend-domain.com",
-    methods: ["GET"],
   }),
 );
 ```
