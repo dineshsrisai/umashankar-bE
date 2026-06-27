@@ -22,4 +22,5 @@ connectDb()
   })
   .catch((e) => {
     console.log("Database cannot be connected");
+    console.log(e);
   });
